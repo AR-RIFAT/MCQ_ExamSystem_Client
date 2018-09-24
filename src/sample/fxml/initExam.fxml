@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
+   <children>
+      <VBox prefHeight="104.0" prefWidth="900.0" style="-fx-border-color: #5d6d7e;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="106.0" prefWidth="200.0" style="-fx-background-color: #fadbd8;">
+               <children>
+                  <Label text="Exam Status">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0" style="-fx-background-color: #abebc6;">
+                           <children>
+                              <Label fx:id="waitClock" text=" HH : MM : SS ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0">
+                           <children>
+                              <Label fx:id="runClock" text=" HH : MM : SS ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0">
+                           <children>
+                              <Label fx:id="endClock" text=" HH : MM : SS ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #fadbd8;">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0" style="-fx-background-color: #abebc6;">
+                           <children>
+                              <Label text="Waiting for Students">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0">
+                           <children>
+                              <Label text="Running">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="260.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="260.0">
+                           <children>
+                              <Label text="Exam Ended">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <Pane minHeight="2.0" prefHeight="10.0" prefWidth="200.0" style="-fx-background-color: #85929e;" />
+         </children>
+      </VBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0">
+         <children>
+            <Pane maxWidth="262.0" minWidth="262.0" prefHeight="200.0" prefWidth="262.0" style="-fx-background-color: #d6eaf8;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <JFXButton fx:id="openQues" layoutX="37.0" layoutY="129.0" prefHeight="45.0" prefWidth="189.0" style="-fx-background-color: #e8daef;" text="Open File">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="answerSheet" layoutX="37.0" layoutY="226.0" prefHeight="45.0" prefWidth="189.0" style="-fx-background-color: #fae5d3;" text="MCQ Answer Sheet">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="2.0" style="-fx-background-color: #aeb6bf;" />
+            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox fx:id="hb" alignment="CENTER" layoutY="-24.0" prefHeight="62.0" prefWidth="200.0" style="-fx-background-color: #aeb6bf;" AnchorPane.bottomAnchor="310.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <JFXButton fx:id="checkMcq" prefHeight="33.0" prefWidth="75.0" style="-fx-background-color: #f5b7b1;" text="Check" />
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="326.0" style="-fx-background-color: #d5dbdb;">
+                           <HBox.margin>
+                              <Insets bottom="6.0" left="8.0" right="20.0" top="8.0" />
+                           </HBox.margin>
+                           <children>
+                              <Label fx:id="checked" text="Checked : 0">
+                                 <VBox.margin>
+                                    <Insets bottom="4.0" top="1.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="4.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="notChecked" text="Remaining : ">
+                                 <padding>
+                                    <Insets left="4.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <JFXButton fx:id="submitAns" prefHeight="35.0" prefWidth="136.0" style="-fx-background-color: #76d7c4;" text="Submit">
+                           <font>
+                              <Font name="Calibri Bold Italic" size="18.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <ScrollPane fitToWidth="true" prefHeight="495.0" prefWidth="636.0">
+                     <content>
+                        <VBox fx:id="mcqBox" prefHeight="200.0" prefWidth="100.0" />
+                     </content>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
