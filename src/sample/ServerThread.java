@@ -16,7 +16,7 @@ public class ServerThread extends Thread {
         Socket socket = null;
         PrintStream ps = null;
         try {
-            socket = new Socket(Helper.hostIP,226);
+            socket = new Socket(Helper.hostIP,Integer.parseInt(Helper.port));
 
             InputStream in = null;
             OutputStream out = null;
@@ -34,9 +34,18 @@ public class ServerThread extends Thread {
             Helper.courseCode = sc.nextLine();
             System.out.println("vuttt");
             Helper.subjectName = sc.nextLine();
+            System.out.println("Ami gesi : "+Helper.subjectName);
             Helper.startTime = sc.nextLine();
             Helper.endTime = sc.nextLine();
             Helper.totalQues = sc.nextInt();
+
+            String temp = Helper.endTime;
+            System.out.println(Helper.endTime);
+            Helper.startTime = temp.substring(0,5);
+            Helper.endTime = temp.substring(5,temp.length());
+
+            System.out.println("Ami start time ?? : "+Helper.startTime);
+            System.out.println("Ami ?? : "+Helper.endTime);
 
             System.out.println(Helper.totalQues);
 
@@ -44,36 +53,56 @@ public class ServerThread extends Thread {
 
 
 
-            Helper.acceptClient = true;
+            //Helper.acceptClient = true;
 
-            while (true)
+            try {
+                in = new BufferedInputStream(socket.getInputStream());
+                String x=System.getProperty("user.home");
+
+                out = new FileOutputStream(x+"/Desktop/"+Helper.courseCode+".pdf");
+                System.out.println(x);
+
+                byte[] bytes = new byte[1];
+
+                int count;
+                while ((count = in.read(bytes)) > 0) {
+                    System.out.println("v  : "+count);
+                    out.write(bytes, 0, count);
+                }
+
+                System.out.println("File Done");
+
+                out.flush();
+                in.close();
+                out.close();
+
+            } catch (Exception ex) {
+                System.out.println("File not found. ");
+            }
+
+/*            while (true)
             {
                 if(Helper.sendFile)
                 {
                     try {
-                        in = socket.getInputStream();
+                        in = new BufferedInputStream(socket.getInputStream());
                         String x=System.getProperty("user.home");
 
                         out = new FileOutputStream(x+"/Desktop/"+Helper.courseCode+".pdf");
                         System.out.println(x);
 
-                        byte[] bytes = new byte[16*1024];
+                        byte[] bytes = new byte[1];
 
                         int count;
-                        while (true) {
-                            count = in.read(bytes);
+                        while ((count = in.read(bytes)) > 0) {
                             System.out.println("v  : "+count);
-                            if(count < 16380){
-                                out.write(bytes, 0, count);
-                                break;
-                            }else{
-                                out.write(bytes, 0, count);
-                            }
-
+                            out.write(bytes, 0, count);
                         }
 
                         System.out.println("File Done");
-                        //in.close();
+
+                        out.flush();
+                        in.close();
                         out.close();
                         break;
 
@@ -87,34 +116,11 @@ public class ServerThread extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("hellllo");
-        }
-
-        System.out.println("Tumi amar");
-
-        while(true){
-
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if(!Helper.wait && !Helper.run){
-                try {
-                    System.out.println(Helper.ans);
-                    ps.println(Helper.ans);
-                    System.out.println("Answer disi ..");
-                    //ps.close();
-                    break;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
 

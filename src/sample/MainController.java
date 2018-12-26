@@ -50,6 +50,21 @@ public class MainController implements Initializable {
 
             @Override
             public void run() {
+
+                while(true){
+
+                    if(!Helper.startTime.equals("")){
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println("ssss"+Helper.startTime);
+
                 int shour = Integer.parseInt(Helper.startTime.substring(0,2));
                 int smin = Integer.parseInt(Helper.startTime.substring(3,5));
                 int ehour = Integer.parseInt(Helper.endTime.substring(0,2));
@@ -62,12 +77,13 @@ public class MainController implements Initializable {
 
                         sleep(800);
                         Date date=new Date();
-                        H=date.getHours();
-                        M=date.getMinutes();
-                        Ss=date.getSeconds();
+                        Calendar cal=Calendar.getInstance();
+                        H=cal.get(Calendar.HOUR);
+                        M=cal.get(Calendar.MINUTE);
+                        Ss=cal.get(Calendar.SECOND);
 
-                        if(H>=12)
-                            H=H-12;
+                       /* if(H>=12)
+                            H=H-12;*/
 
                         if(Helper.wait &&((H==shour && smin==M)||((H>shour || (M>smin && H==shour)))))
                         {
@@ -99,11 +115,11 @@ public class MainController implements Initializable {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                 System.out.println(Helper.wait+" "+Helper.run);
+                                // System.out.println(Helper.wait+" "+Helper.run);
 
                                 String time=Integer.toString(H)+" : "+Integer.toString(M)+" : "+Integer.toString(Ss);
 
-                                System.out.println(time);
+                            //    System.out.println(time);
                                 if(Helper.wait && !Helper.run)
                                     waitClock.setText(time);
                                 else if(!Helper.wait && Helper.run)
@@ -124,54 +140,127 @@ public class MainController implements Initializable {
         };
         t.start();
 
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("HH:mm");
+
+
+        Thread ansSenderThread = new Thread(){
+
+            @Override
+            public void run() {
+                int min;
+
+                System.out.println("ami shei thread");
+
+                while (true){
+                    String ck = Helper.endTime;
+                    if(!ck.equals("")){
+                        min = Integer.parseInt(Helper.endTime.substring(3,5));
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                while (true){
+                    String ctime = dateFormatGmt.format(Calendar.getInstance().getTime());
+
+                    int cmin = Integer.parseInt(ctime.substring(3,5));
+
+                    if(cmin == min){
+                        System.out.println("he he ami");
+                        AnswerSender answerSender = new AnswerSender();
+                        answerSender.start();
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        ansSenderThread.start();
+
         List<ToggleGroup> tg = new ArrayList<>();
 
-        int totalMCQ = Helper.totalQues;
+        Thread mcqLoader = new Thread(){
 
-        System.out.println("total "+totalMCQ);
+            @Override
+            public void run() {
 
-        for(int i=1;i<=totalMCQ;i++){
-            RadioButton a = new RadioButton("A");
-            RadioButton b = new RadioButton("B");
-            RadioButton c = new RadioButton("C");
-            RadioButton d = new RadioButton("D");
+                while(true){
 
-            ToggleGroup ansGroup = new ToggleGroup();
+                    if(!(Helper.totalQues == 0)){
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            a.setToggleGroup(ansGroup);
-            b.setToggleGroup(ansGroup);
-            c.setToggleGroup(ansGroup);
-            d.setToggleGroup(ansGroup);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
 
-            Insets insets = new Insets(0,60,0,20);
-            a.setPadding(insets);
-            b.setPadding(insets);
-            c.setPadding(insets);
-            d.setPadding(insets);
+                        int totalMCQ = Helper.totalQues;
 
-            HBox hb = new HBox(new Label("Ques No. " + Integer.toString(i)+" :  "),a,b,c,d);
+                        System.out.println("total "+totalMCQ);
 
-            Insets insp = new Insets(12,12,12,26);
+                        for(int i=1;i<=totalMCQ;i++){
+                            RadioButton a = new RadioButton("A");
+                            RadioButton b = new RadioButton("B");
+                            RadioButton c = new RadioButton("C");
+                            RadioButton d = new RadioButton("D");
 
-            Insets insm = new Insets(6,12,6,12);
+                            ToggleGroup ansGroup = new ToggleGroup();
 
-            hb.setPadding(insp);
+                            a.setToggleGroup(ansGroup);
+                            b.setToggleGroup(ansGroup);
+                            c.setToggleGroup(ansGroup);
+                            d.setToggleGroup(ansGroup);
 
-            String style1 = "-fx-background-color: rgba(174, 214, 241);";
+                            Insets insets = new Insets(0,60,0,20);
+                            a.setPadding(insets);
+                            b.setPadding(insets);
+                            c.setPadding(insets);
+                            d.setPadding(insets);
 
-            String style2 = "-fx-background-color: rgba(253, 254, 254);";
+                            HBox hb = new HBox(new Label("Ques No. " + Integer.toString(i)+" :  "),a,b,c,d);
 
-            if(i%2 == 0){
-                hb.setStyle(style1);
-            }else{
-                hb.setStyle(style2);
+                            Insets insp = new Insets(12,12,12,26);
+
+                            Insets insm = new Insets(6,12,6,12);
+
+                            hb.setPadding(insp);
+
+                            String style1 = "-fx-background-color: rgba(174, 214, 241);";
+
+                            String style2 = "-fx-background-color: rgba(253, 254, 254);";
+
+                            if(i%2 == 0){
+                                hb.setStyle(style1);
+                            }else{
+                                hb.setStyle(style2);
+                            }
+
+                            mcqBox.getChildren().add(hb);
+
+                            tg.add(ansGroup);
+
+                        }
+                    }
+                });
             }
+        };
 
-            mcqBox.getChildren().add(hb);
-
-            tg.add(ansGroup);
-
-        }
+        mcqLoader.start();
 
         checkMcq.setOnAction(e->{
             String ck="";
@@ -196,10 +285,10 @@ public class MainController implements Initializable {
 
         });
 
-        ans = Helper.regNo;
+        ans = "";
 
         answerSheet.setOnAction(e->{
-            for(int i=0;i<totalMCQ;i++){
+            for(int i=0;i<Helper.totalQues;i++){
                 ToggleGroup tgp = tg.get(i);
                 try{
                     RadioButton rb = (RadioButton) tgp.getSelectedToggle();

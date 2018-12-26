@@ -45,7 +45,7 @@ public class NewExamForm implements Initializable {
                 e1.printStackTrace();
             }
 
-            Thread t2=new Thread(){
+/*            Thread t2=new Thread(){
                 @Override
                 public void run() {
 
@@ -80,7 +80,7 @@ public class NewExamForm implements Initializable {
                     }
                 }
             };
-            t2.start();
+            t2.start();*/
 
 
         });

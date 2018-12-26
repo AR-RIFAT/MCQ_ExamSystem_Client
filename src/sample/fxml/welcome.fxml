@@ -20,7 +20,7 @@
             <Image url="@../img/lol.jpg" />
          </image>
       </ImageView>
-      <JFXButton fx:id="newExam" layoutX="74.0" layoutY="206.0" prefHeight="62.0" prefWidth="237.0" style="-fx-background-color: #82e0aa;" text="New Exam" textFill="#805959">
+      <JFXButton fx:id="newExam" layoutX="61.0" layoutY="303.0" prefHeight="62.0" prefWidth="237.0" style="-fx-background-color: #82e0aa;" text="New Exam" textFill="#805959">
          <font>
             <Font size="26.0" />
          </font>
@@ -31,6 +31,11 @@
          </font>
       </Label>
       <JFXTextField fx:id="hostAdd" layoutX="74.0" layoutY="96.0" maxWidth="246.0" minWidth="225.0" prefHeight="46.0" prefWidth="237.0" promptText="IPv4 address">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="port" layoutX="74.0" layoutY="166.0" maxWidth="246.0" minWidth="225.0" prefHeight="46.0" prefWidth="237.0" promptText="Port">
          <font>
             <Font size="18.0" />
          </font>

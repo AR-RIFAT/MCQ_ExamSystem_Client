@@ -20,7 +20,7 @@ public class WelcomeController implements Initializable {
     JFXButton newExam;
 
     @FXML
-    JFXTextField hostAdd;
+    JFXTextField hostAdd,port;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,6 +29,7 @@ public class WelcomeController implements Initializable {
 
             if(hostAdd.getText().length() > 8){
                 Helper.hostIP = hostAdd.getText();
+                Helper.port = port.getText();
                 try {
                     AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/newExamForm.fxml"));
                     Main.mStage.setScene(new Scene(root,800,600));

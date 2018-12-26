@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Helper {
 
+    public static String port = "";
+
     public static String hostIP;
 
     public static boolean acceptClient = false ;
@@ -12,9 +14,9 @@ public class Helper {
 
     public static boolean isQuestionAvailable = false;
 
-    public static String courseCode,subjectName,quesPath,startTime,endTime,regNo,studentName;
+    public static String courseCode,subjectName,quesPath,startTime="",endTime="",regNo,studentName;
 
-    public static int totalQues;
+    public static int totalQues=0;
 
     public static ArrayList<String> students=new ArrayList<>();
     public static boolean wait=true,run=false;
