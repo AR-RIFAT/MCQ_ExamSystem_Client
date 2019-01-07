@@ -20,19 +20,26 @@ public class WelcomeController implements Initializable {
     JFXButton newExam;
 
     @FXML
-    JFXTextField hostAdd,port;
+    JFXTextField hostAdd,port,regNo,studentName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        new TimeUpdateCheckerThread().start();
 
         newExam.setOnAction(e->{
 
             if(hostAdd.getText().length() > 8){
                 Helper.hostIP = hostAdd.getText();
-                Helper.port = port.getText();
+                Helper.serverPort = port.getText();
+                Helper.regNo = regNo.getText();
+                Helper.studentName = studentName.getText();
+                ServerThread serverThread = new ServerThread();
+                serverThread.start();
+                System.out.println(Helper.regNo+" ## "+Helper.studentName);
                 try {
-                    AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/newExamForm.fxml"));
-                    Main.mStage.setScene(new Scene(root,800,600));
+                    AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/examDashboard.fxml")); //newExamForm
+                    Main.mStage.setScene(new Scene(root,1024,600));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

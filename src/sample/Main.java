@@ -14,10 +14,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         mStage = primaryStage;
-//        AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/main.fxml"));
+//        AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/welcome.fxml"));
         AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/welcome.fxml"));
         primaryStage.setTitle("Exam");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1024, 600));
         primaryStage.show();
     }
 
@@ -25,4 +25,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    @Override
+    public void stop() throws Exception {
+        System.out.println("stop");
+        System.exit(0);
+    }
+
 }

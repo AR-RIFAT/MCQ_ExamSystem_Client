@@ -2,14 +2,21 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.File;
@@ -29,121 +36,59 @@ public class MainController implements Initializable {
     String ans;
 
     @FXML
-    private JFXButton openQues,answerSheet,checkMcq;
+    private JFXButton answerSheet,checkMcq;
     @FXML
-    public VBox mcqBox;
+    Button openQues;
     @FXML
-    private Label waitClock,runClock,endClock,checked,notChecked;
+    public VBox mcqBox,bak;
+    @FXML
+    private Label courseCode,courseName,totalQues,Date,startTime,endTime,clock,examStatus,checked,notChecked;
 
-  int H=0,M=0,Ss=0,Ms=0;
+    Calendar calendar;
+    int H=0,M=0,Ss=0,Ms=0;
+    private String ampm;
+    static Boolean Flag=false;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-
-      //  remainingTime();
-
-        Thread t=new Thread(){
-
-
-            @Override
-            public void run() {
-
-                while(true){
-
-                    if(!Helper.startTime.equals("")){
-                        break;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                System.out.println("ssss"+Helper.startTime);
-
-                int shour = Integer.parseInt(Helper.startTime.substring(0,2));
-                int smin = Integer.parseInt(Helper.startTime.substring(3,5));
-                int ehour = Integer.parseInt(Helper.endTime.substring(0,2));
-                int emin = Integer.parseInt(Helper.endTime.substring(3,5));
-
-
-                while (Helper.wait || Helper.run)
-                {
-                    try {
-
-                        sleep(800);
-                        Date date=new Date();
-                        Calendar cal=Calendar.getInstance();
-                        H=cal.get(Calendar.HOUR);
-                        M=cal.get(Calendar.MINUTE);
-                        Ss=cal.get(Calendar.SECOND);
-
-                       /* if(H>=12)
-                            H=H-12;*/
-
-                        if(Helper.wait &&((H==shour && smin==M)||((H>shour || (M>smin && H==shour)))))
-                        {
-                            Ss=run_s;
-                            Helper.wait=false;
-                            Helper.run=true;
-                            Helper.sendFile = true;
-
-
-                            System.out.println("Time "+Ss);
-                            Ms=0;
-                            Helper.isQuestionAvailable = true;
-
-                        }
-                        if(Helper.run &&((H==ehour && emin==M)||((H>ehour || (M>emin && H==ehour)))))
-                        {
-                            Helper.run=false;
-                            //set ended exam;
-                        }
-
-                       /* if(Ms==660)
-                        {
-                            Ms=0;
-                            Ss=Ss-1;
-                        }
-
-                        Ms=Ms+1;*/
-
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                // System.out.println(Helper.wait+" "+Helper.run);
-
-                                String time=Integer.toString(H)+" : "+Integer.toString(M)+" : "+Integer.toString(Ss);
-
-                            //    System.out.println(time);
-                                if(Helper.wait && !Helper.run)
-                                    waitClock.setText(time);
-                                else if(!Helper.wait && Helper.run)
-                                    runClock.setText(time);
-                                else
-                                    endClock.setText(time);
-
-
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
+        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->{
+            if(Main.mStage.getWidth() > 1100){
+                HBox.setMargin(bak,new Insets(0,226,0,0));
+            }
+            if(Main.mStage.getWidth() < 1100){
+                HBox.setMargin(bak,new Insets(0,70,0,0));
             }
         };
-        t.start();
+        Main.mStage.widthProperty().addListener(stageSizeListener);
+        Main.mStage.heightProperty().addListener(stageSizeListener);
 
-        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("HH:mm");
+        courseCode.setText(": "+Helper.courseCode);
+        courseName.setText(": "+Helper.examTitle);
+        totalQues.setText(": "+Integer.toString(Helper.totalQues));
+
+        String ddate = new Date().toString();
+
+        String[] ardate = ddate.split(" ");
+
+        ddate = ardate[0]+" "+ardate[1]+" "+ardate[2]+" "+ardate[5];
+
+        Date.setText(": "+ddate);
+
+        calendar=Calendar.getInstance();
+
+        Helper.setTime();
+        startTime.setText(Helper.StartTime);
+        endTime.setText(Helper.EndTime);
 
 
-        Thread ansSenderThread = new Thread(){
+        Helper.wait = true;
+        Helper.run = false;
+        Clock();
+        ansSender();
+
+/*        Thread ansSenderThread = new Thread(){
 
             @Override
             public void run() {
@@ -154,7 +99,8 @@ public class MainController implements Initializable {
                 while (true){
                     String ck = Helper.endTime;
                     if(!ck.equals("")){
-                        min = Integer.parseInt(Helper.endTime.substring(3,5));
+
+                        min = Helper.emin;
                         break;
                     }
                     try {
@@ -170,6 +116,7 @@ public class MainController implements Initializable {
                     int cmin = Integer.parseInt(ctime.substring(3,5));
 
                     if(cmin == min){
+                        answerSheet.fire();
                         System.out.println("he he ami");
                         AnswerSender answerSender = new AnswerSender();
                         answerSender.start();
@@ -184,9 +131,54 @@ public class MainController implements Initializable {
             }
         };
 
-        ansSenderThread.start();
+        ansSenderThread.start();*/
 
-        List<ToggleGroup> tg = new ArrayList<>();
+        Thread updateTime = new Thread(){
+
+            @Override
+            public void run() {
+
+                while(true){
+
+                    if(Helper.timeUpdate){
+
+                        Helper.senderUpdate = false;
+
+                        ansSender();
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                System.out.println("update Time");
+
+                                startTime.setText(Helper.StartTime);
+                                endTime.setText(Helper.EndTime);
+                            }
+                        });
+
+                        Helper.timeUpdate = false;
+                    }
+
+                    if(Helper.breakTimeUpdate){
+                        break;
+                    }
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        };
+
+        updateTime.start();
+
+        List<ToggleGroup> tgList = new ArrayList<>();
+        List<StackPane> stpList = new ArrayList<>();
+        List<HBox> hboxList = new ArrayList<>();
 
         Thread mcqLoader = new Thread(){
 
@@ -214,10 +206,10 @@ public class MainController implements Initializable {
                         System.out.println("total "+totalMCQ);
 
                         for(int i=1;i<=totalMCQ;i++){
-                            RadioButton a = new RadioButton("A");
-                            RadioButton b = new RadioButton("B");
-                            RadioButton c = new RadioButton("C");
-                            RadioButton d = new RadioButton("D");
+                            Helper.MyRadioButton a = new Helper.MyRadioButton("A");
+                            Helper.MyRadioButton b = new Helper.MyRadioButton("B");
+                            Helper.MyRadioButton c = new Helper.MyRadioButton("C");
+                            Helper.MyRadioButton d = new Helper.MyRadioButton("D");
 
                             ToggleGroup ansGroup = new ToggleGroup();
 
@@ -234,25 +226,56 @@ public class MainController implements Initializable {
 
                             HBox hb = new HBox(new Label("Ques No. " + Integer.toString(i)+" :  "),a,b,c,d);
 
+                            hb.setAlignment(Pos.CENTER);
+
                             Insets insp = new Insets(12,12,12,26);
 
                             Insets insm = new Insets(6,12,6,12);
 
                             hb.setPadding(insp);
 
-                            String style1 = "-fx-background-color: rgba(174, 214, 241);";
+                            String white = "-fx-background-color: rgba(255, 255, 255);";
 
-                            String style2 = "-fx-background-color: rgba(253, 254, 254);";
+                            String style1 = "-fx-background-color: rgba( 146, 202, 223 );";
+
+                            String style2 = "-fx-background-color: rgba(52, 152, 219);";
+
+                            hb.setStyle(white);
+
+                            HBox hbCover = new HBox(new Label("Question "+Integer.toString(i)));
+
+                            hbCover.setAlignment(Pos.CENTER);
+
 
                             if(i%2 == 0){
-                                hb.setStyle(style1);
+                                hbCover.setStyle(style1);
                             }else{
-                                hb.setStyle(style2);
+                                hbCover.setStyle(style2);
                             }
 
-                            mcqBox.getChildren().add(hb);
+                            hboxList.add(hbCover);
 
-                            tg.add(ansGroup);
+                            StackPane stMain = new StackPane(hb,hbCover);
+                            stMain.setPrefHeight(66);
+
+                            stpList.add(stMain);
+
+                            mcqBox.getChildren().add(stMain);
+
+                            tgList.add(ansGroup);
+
+                        }
+                        for(int i=0;i<totalMCQ;i++){
+                            StackPane stp = stpList.get(i);
+                            HBox mhb = hboxList.get(i);
+
+                            stp.hoverProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean show) -> {
+                                if (show) {
+                                    mhb.setVisible(false);
+                                } else {
+                                    mhb.setVisible(true);
+                                }
+                            });
 
                         }
                     }
@@ -268,9 +291,9 @@ public class MainController implements Initializable {
             String notck="";
             int countNotck = 0;
             for(int i=1;i<=Helper.totalQues;i++){
-                ToggleGroup tgp = tg.get(i-1);
+                ToggleGroup tgp = tgList.get(i-1);
                 try{
-                    RadioButton rb = (RadioButton) tgp.getSelectedToggle();
+                    Helper.MyRadioButton rb = (Helper.MyRadioButton) tgp.getSelectedToggle();
                     rb.getText();
                     ck+=Integer.toString(i)+", ";
                     countck++;
@@ -285,11 +308,10 @@ public class MainController implements Initializable {
 
         });
 
-        ans = "";
-
         answerSheet.setOnAction(e->{
+            ans = "";
             for(int i=0;i<Helper.totalQues;i++){
-                ToggleGroup tgp = tg.get(i);
+                ToggleGroup tgp = tgList.get(i);
                 try{
                     RadioButton rb = (RadioButton) tgp.getSelectedToggle();
                     ans+=rb.getText();
@@ -320,9 +342,202 @@ public class MainController implements Initializable {
             }
         });
 
+        Main.mStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                event.consume();
+                Alert alert = new Alert(Alert.AlertType.NONE, "Current Exam Will be lost. Confirm ?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.YES) {
+                    // you may need to close other windows or replace this with Platform.exit();
+                    try {
+                        Helper.breakTimeUpdate = true;
+                        new Socket("127.0.0.1", Helper.myPort);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println("Close Clicked");
+
+                    Main.mStage.close();
+                }
+
+            }
+        });
+
     }
 
     //// ------- Methods ------- /////
+
+    private void Clock() {
+
+        Thread t=new Thread(){
+
+
+            @Override
+            public void run() {
+
+                while(true){
+
+                    if(!Helper.startTime.equals("")){
+                        Helper.setTime();
+
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println("start time"+Helper.startTime);
+
+                while (Helper.wait || Helper.run)
+                {
+                    /*if(Flag){
+                        Flag = false;
+                        System.out.println("Clock Restarting");
+                        break;
+                    }*/
+                    try {
+
+                        sleep(800);
+                        Date date=new Date();
+                        Calendar cal=Calendar.getInstance();
+                        H=cal.get(Calendar.HOUR);
+                        M=cal.get(Calendar.MINUTE);
+                        Ss=cal.get(Calendar.SECOND);
+
+                       /* if(H>=12)
+                            H=H-12;*/
+
+                        if(Helper.wait &&(H==Helper.shour && Helper.smin==M))
+                        {
+                            Ss=run_s;
+                            Helper.wait=false;
+                            Helper.run=true;
+                            Helper.sendFile = true;
+
+
+                            System.out.println("Time "+Ss);
+                            Ms=0;
+                            Helper.isQuestionAvailable = true;
+
+                        }
+                        if(Helper.run &&(H==Helper.ehour && Helper.emin==M))
+                        {
+                            Helper.run=false;
+                            //set ended exam;
+                        }
+
+                       /* if(Ms==660)
+                        {
+                            Ms=0;
+                            Ss=Ss-1;
+                        }
+
+                        Ms=Ms+1;*/
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                // System.out.println(Helper.wait+" "+Helper.run);
+
+                                int NewH=H;
+                                if(H==0)
+                                    NewH=12;
+
+                                String time=String.format("%02d",NewH)+" : "+String.format("%02d",M)+" : "+String.format("%02d",Ss);
+
+                                if(Helper.run){
+                                    //waitClock.setText(time);
+                                    examStatus.setText("Running");
+                                }
+                                else if(!Helper.run &&!Helper.wait){
+                                    //runClock.setText(time);
+                                    examStatus.setText("Ended");
+                                }
+                                else{
+                                    //endClock.setText(time);
+                                    examStatus.setText("Waiting");
+                                }
+                                clock.setText(time);
+/*                            //    System.out.println(time);
+                                if(Helper.wait && !Helper.run)
+                                    waitClock.setText(time);
+                                else if(!Helper.wait && Helper.run)
+                                    runClock.setText(time);
+                                else
+                                    endClock.setText(time);*/
+
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        };
+        t.start();
+    }
+
+    private void ansSender(){
+
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("HH:mm");
+        Thread ansSenderThread = new Thread(){
+
+            @Override
+            public void run() {
+                int min;
+
+                System.out.println("ami shei thread");
+
+                while (true){
+                    String ck = Helper.endTime;
+                    if(!ck.equals("")){
+
+                        min = Helper.emin;
+                        System.out.println("updated endMin : "+min);
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                while (true){
+                    String ctime = dateFormatGmt.format(Calendar.getInstance().getTime());
+
+                    int cmin = Integer.parseInt(ctime.substring(3,5));
+
+                    if(Helper.senderUpdate){
+                        Helper.timeUpdate = true;
+                        break;
+                    }
+
+                    if(cmin == min){
+                        answerSheet.fire();
+                        System.out.println("he he ami");
+                        AnswerSender answerSender = new AnswerSender();
+                        answerSender.start();
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        ansSenderThread.start();
+    }
 
     private void stopClient() throws IOException {
         System.out.println("bondho kori ");
@@ -330,36 +545,5 @@ public class MainController implements Initializable {
         Socket sock = new Socket("127.0.0.1",226);
     }
 
-    private void remainingTime(){
-
-        String timeStamp = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
-        int h = Integer.parseInt(timeStamp.substring(0,2));
-        int m = Integer.parseInt(timeStamp.substring(2,4));
-        int s = Integer.parseInt(timeStamp.substring(4,6));
-        int shour = Integer.parseInt(Helper.startTime.substring(0,2));
-        int smin = Integer.parseInt(Helper.startTime.substring(3,5));
-        int ehour = Integer.parseInt(Helper.endTime.substring(0,2));
-        int emin = Integer.parseInt(Helper.endTime.substring(3,5));
-
-
-
-        if(h>=12)
-            h=h-12;
-        if(shour>=12)
-            shour=shour-12;
-        if(ehour>=12)
-            ehour=ehour-12;
-
-
-
-        wait_s=((shour*3600+smin*60)-(h*3600+m*60+s));
-        if(wait_s<0) {
-            wait_s = 0;
-
-        }
-        Ss=wait_s;
-        run_s=((ehour*3600+emin*60)-(shour*3600+smin*60));
-
-    }
 
 }

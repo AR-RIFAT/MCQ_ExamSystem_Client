@@ -2,17 +2,16 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,69 +26,69 @@ public class NewExamForm implements Initializable {
     @FXML
     JFXTextField regNo,studentName;
 
+    AnchorPane root;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        joinExam.setOnAction(e->{
+        acceptClient();
+
+        try {
+            root = FXMLLoader.load(getClass().getResource("fxml/examDashboard.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+/*        joinExam.setOnAction(e->{
             Helper.regNo = regNo.getText();
             Helper.studentName = studentName.getText();
 
-            System.out.println(Helper.subjectName);
+            System.out.println("my name : "+Helper.studentName);
 
-            acceptClient();
+           acceptClient();
 
             try {
-                AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/initExam.fxml"));
-                Main.mStage.setScene(new Scene(root,800,600));
+                AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/examDashboard.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root,1024,600));
+                stage.show();
+
+                Node source = (Node)  e.getSource();
+                Stage stageRoot  = (Stage) source.getScene().getWindow();
+                //stage.getOnCloseRequest().handle(null);
+                stageRoot.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
 
-/*            Thread t2=new Thread(){
-                @Override
-                public void run() {
 
-                    boolean x=true;
-
-                    while(x)
-                    {
-                        try {
-                            sleep(20);
-                        } catch (InterruptedException e1) {
-
-                            System.out.println("Eki holo putu mara");
-                            e1.printStackTrace();
-                        }
-                        if(Helper.acceptClient)
-                        {
-
-                            System.out.println("Eki holo");
-                            x=false;
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/initExam.fxml"));
-                                        Main.mStage.setScene(new Scene(root,800,600));
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            };
-            t2.start();*/
-
-
-        });
+        });*/
 
     }
 
     private void acceptClient(){
         ServerThread serverThread = new ServerThread();
         serverThread.start();
+    }
+
+    public void joinButton() throws IOException{
+        try {
+/*            acceptClient();
+
+            Helper.regNo = regNo.getText();
+            Helper.studentName = studentName.getText();
+
+            System.out.println("my name : "+Helper.studentName);
+
+            AnchorPane root = FXMLLoader.load(getClass().getResource("fxml/examDashboard.fxml"));*/
+            System.out.println("MMMMMMMMMMM");
+            Main.mStage.setScene(new Scene(root,1024,600));
+
+            System.out.println("PPPPPPPPPPPPPPPPPPP");
+        }catch (Exception e){
+            e.getCause();
+        }
+
     }
 
     public void backtoHome() throws IOException {

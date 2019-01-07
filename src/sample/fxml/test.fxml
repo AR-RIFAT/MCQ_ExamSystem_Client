@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.kairos.components.TextInputLayout?>
 
 <AnchorPane prefHeight="456.0" prefWidth="721.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Test">
    <children>
-      <Button fx:id="btn" layoutX="295.0" layoutY="68.0" mnemonicParsing="false" text="Button" />
+      <TextInputLayout AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="16.0">
+         <children>
+            <JFXTextField promptText="  Username">
+               <padding>
+                  <Insets top="16.0" />
+               </padding>
+               <font>
+                  <Font name="Candara" size="18.0" />
+               </font>
+            </JFXTextField>
+         </children>
+      </TextInputLayout>
+      <Button fx:id="btn" layoutX="34.0" layoutY="62.0" mnemonicParsing="false" text="Button" />
+      <ScrollPane layoutX="95.0" layoutY="62.0" prefHeight="124.0" prefWidth="487.0">
+         <content>
+            <VBox fx:id="box" prefHeight="231.0" prefWidth="503.0">
+               <children>
+                  <StackPane fx:id="stack1" prefHeight="64.0" prefWidth="592.0" style="-fx-background-color: #b5f9d2;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="loka" mnemonicParsing="false" onMouseClicked="#setPrint" text="Button" />
+                        <HBox fx:id="p1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #a1aba6;">
+                           <children>
+                              <Label text="Question 1">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="70.0" prefWidth="592.0" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Label">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Pane fx:id="p2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="64.0" prefWidth="592.0" style="-fx-background-color: #b5f9d2;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Label">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Pane fx:id="p3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a1aba6;" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="70.0" prefWidth="592.0" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Label">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Pane fx:id="p4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="64.0" prefWidth="592.0" style="-fx-background-color: #b3f7d0;" VBox.vgrow="ALWAYS" />
+                  <StackPane prefHeight="70.0" prefWidth="592.0" style="-fx-background-color: #ffffff;" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <ScrollPane layoutX="75.0" layoutY="275.0" prefHeight="188.0" prefWidth="567.0">
+         <content>
+            <VBox fx:id="bbox" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

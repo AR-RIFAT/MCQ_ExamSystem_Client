@@ -42,7 +42,7 @@
             </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <JFXButton fx:id="joinExam" prefHeight="22.0" prefWidth="137.0" style="-fx-background-color: #52be80;" text="Join" textFill="WHITE">
+                        <JFXButton fx:id="joinExam" onMouseClicked="#joinButton" prefHeight="22.0" prefWidth="137.0" style="-fx-background-color: #52be80;" text="Join" textFill="WHITE">
                             <font>
                                 <Font size="16.0" />
                             </font>

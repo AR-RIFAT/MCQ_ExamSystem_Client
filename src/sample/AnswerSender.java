@@ -11,7 +11,7 @@ public class AnswerSender extends Thread {
 
         try {
 
-            Socket socket = new Socket(Helper.hostIP,Integer.parseInt(Helper.port));
+            Socket socket = new Socket(Helper.hostIP,Integer.parseInt(Helper.serverPort));
 
             PrintStream ps = new PrintStream(socket.getOutputStream());
 
